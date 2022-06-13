@@ -1,0 +1,22 @@
+Website that collects articles from websites according to a specific theme (Piano pedagogy?) and displays them
+    Features:
+    weekly newsletter
+    ability to "favorite" and save certain articles
+    Comments?
+
+Tutorial for web scraping:
+    https://towardsdatascience.com/scraping-1000s-of-news-articles-using-10-simple-steps-d57636a49755
+
+Google news python library:
+    https://github.com/kotartemiy/pygooglenews
+
+Common crawl:
+    https://commoncrawl.org/
+
+RSS feeds?
+
+Will definitely use flask
+Build from CS50's template since I know how to use it
+
+TODO: Alter layout
+

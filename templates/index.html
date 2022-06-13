@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    News
+{% endblock %}
+
+{% block main %}
+{% for article in articles %}
+<a href = {{ article['link'] }}><p>{{ article['title'] }}</p></a>
+<p>{{ article['datetime'] }}</p>
+{% endfor %}
+
+{% endblock %}
