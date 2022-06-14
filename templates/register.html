@@ -10,24 +10,71 @@
             <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
             <p id="usernameIndicator" class="error"></p>
         </div>
+        <!-- validates user input, turns field red and gives error message -->
         <script>
             let username = document.querySelector('#username');
-            function promptUser() {
+            function promptUsername() {
                 if ("{{ usernameInput }}" == "False") {
                     username.style.border = '2px solid red';
                     let html = 'Please enter a username.'
                     document.querySelector('#usernameIndicator').innerHTML = html
                 }
             }
-            promptUser()
+            promptUsername()
         </script>
-
+        <script>
+            username = document.querySelector('#username');
+            function promptUniqueUsername() {
+                if ("{{ uniqueUsername }}" == "False") {
+                    username.style.border = '2px solid red';
+                    let html = 'Username is already taken.'
+                    document.querySelector('#usernameIndicator').innerHTML = html
+                }
+            }
+            promptUniqueUsername()
+        </script>
         <div class="mb-3">
             <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password">
         </div>
+        <p id="passwordIndicator" class="error"></p>
+        <script>
+            let password = document.querySelector('#password');
+            function promptPassword() {
+                if ("{{ passwordInput }}" == "False") {
+                    password.style.border = '2px solid red';
+                    let html = 'Please enter a password.'
+                    document.querySelector('#passwordIndicator').innerHTML = html
+                }
+            }
+            promptPassword()
+        </script>
         <div class="mb-3">
             <input class="form-control mx-auto w-auto" id="confirmation" name="confirmation" placeholder="Confirm password" type="password">
         </div>
+        <p id="confirmationIndicator" class="error"></p>
+        <script>
+            let confirmation = document.querySelector('#confirmation');
+            function promptConfirmation() {
+                if ("{{ confirmationInput }}" == "False") {
+                    confirmation.style.border = '2px solid red';
+                    let html = 'Please confirm your password.'
+                    document.querySelector('#confirmationIndicator').innerHTML = html
+                }
+            }
+            promptConfirmation()
+        </script>
+        <script>
+            confirmation = document.querySelector('#confirmation');
+            function promptPasswordsMatch() {
+                if ("{{ passwordsMatch }}" == "False") {
+                    console.log('hi')
+                    confirmation.style.border = '2px solid red';
+                    let html = "Passwords don't match."
+                    document.querySelector('#confirmationIndicator').innerHTML = html
+                }
+            }
+            promptPasswordsMatch()
+        </script>
         <button class="btn btn-primary" type="submit">Register</button>
     </form>
 {% endblock %}

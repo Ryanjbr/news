@@ -6,8 +6,11 @@
 
 {% block main %}
 {% for article in articles %}
-<a href = {{ article['link'] }}><p>{{ article['title'] }}</p></a>
+<div class="article">    
+<h1><a href = {{ article['link'] }}>{{ article['title'] }}</a></h1>
 <p>{{ article['datetime'] }}</p>
+<button>Favorite</button>
+</div>
 {% endfor %}
 
 {% endblock %}

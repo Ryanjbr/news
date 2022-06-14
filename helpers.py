@@ -33,3 +33,11 @@ def sql_to_dict(path_to_db, select_query):
         return []
     finally:
         con.close()
+
+def date_to_int(date):
+    dtInt = date.year*100000000 +\
+      date.month * 1000000 +\
+      date.day * 10000 +\
+      date.hour*100 +\
+      date.minute
+    return dtInt

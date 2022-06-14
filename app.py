@@ -3,6 +3,7 @@ import os
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
+from sqlalchemy import null
 from werkzeug.security import check_password_hash, generate_password_hash
 from requests_html import HTMLSession
 from pygooglenews import GoogleNews
@@ -131,25 +132,27 @@ def register():
         password = request.form.get("password")
         if not password:
             # TODO: abstract the prompt_user function to work for all of the inputs without needing to change
-            return render_template("register.html", passwordInput = False, text = "You must enter a password")
+            return render_template("register.html", passwordInput = "False")
         confirmation = request.form.get("confirmation")
         if not confirmation:
-            return render_template("register.html", confirmationInput = False, text = "You must confirm your password")
+            return render_template("register.html", confirmationInput = "False")
     # check that password and confirmation match
         if password != confirmation:
-            return render_template("register.html", passwordsMatch = False, text = "Passwords do not match")
+            return render_template("register.html", passwordsMatch = "False")
     # check that username is not already taken (return apologies for all)
         # TODO: incorrect number of bindings applied?
-        if db.execute("SELECT * from users WHERE username = ?", (username,)):
-            # TODO: Replace apology with JS
-            return render_template("register.html", text = "Username already exists")
+        if db.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchall():
+            return render_template("register.html", uniqueUsername = "False")
         # use generate_password_hash
             # Hash the user password
         hash = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
         # use db.execute to insert user, using ? to insert yet unknown values
-        db.execute("INSERT into users(username, hash) VALUES(?, ?)", username, hash)
-
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        # TODO: not working
+        db.execute("INSERT into users(username, hash) VALUES(?, ?)", (username, hash))
+        connection.commit()
+        QUERY = "SELECT * FROM users WHERE username=" + "'" + request.form.get("username") + "'"
+        rows = sql_to_dict('news.db', QUERY)
+        print(rows)
         session["user_id"] = rows[0]["id"]
         connection.close()
         return redirect("/")
