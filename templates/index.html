@@ -6,10 +6,18 @@
 
 {% block main %}
 {% for article in articles %}
-<div class="article">    
-<h1><a href = {{ article['link'] }}>{{ article['title'] }}</a></h1>
-<p>{{ article['datetime'] }}</p>
-<button>Favorite</button>
+<div class="container">
+    <div class="article">    
+        {% if article['title']|length <= 100 %}
+        <h1><a href = {{ article['link'] }}>{{ article['title'] }}</a></h1>
+        <p>{{ article['datetime'] }}</p>
+        <button>Favorite</button>
+        {% else %}
+        <h1><a href = {{ article['link'] }}>{{ article['title'][0:100] }}[...]</a></h1>
+        <p>{{ article['datetime'] }}</p>
+        <button>Favorite</button>
+        {% endif %}
+    </div>
 </div>
 {% endfor %}
 

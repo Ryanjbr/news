@@ -1,0 +1,1 @@
+print(len("NAATCO's QUEEN to Begin Performances the ART/New York Mezzanine Theatre This Friday - Broadway World"))

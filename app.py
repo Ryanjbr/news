@@ -12,10 +12,10 @@ import sqlite3
 
 
 
-# TODO: implement article display and ordering
+# TODO: separate news posts and blog posts
 # TODO: Customize style and css
-# TODO: Create change password page
-# TODO: For error messages - re-render the page with incorrect field having red border and popup message underneath
+# TODO: implement favorites functionality and create favorites page
+# TODO: implement field errors for login page
 
 # Configure application
 app = Flask(__name__)
