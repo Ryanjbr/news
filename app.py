@@ -41,10 +41,28 @@ def after_request(response):
 def index():
     if request.method == "GET":
         # populates a dict with articles title, link and date from DB
-        QUERY = "SELECT title, link, datetime FROM articles ORDER BY datetime DESC"
+        QUERY = "SELECT title, link, datetime FROM news ORDER BY datetime DESC"
         articles = sql_to_dict('news.db', QUERY)
 
         return render_template("index.html", articles=articles)
+
+@app.route("/blogs")
+def blogs():
+    if request.method == "GET":
+        # populates a dict with articles title, link and date from DB
+        QUERY = "SELECT title, link, datetime FROM blogs ORDER BY datetime DESC"
+        articles = sql_to_dict('news.db', QUERY)
+
+        return render_template("blogs.html", articles=articles)
+
+@app.route("/favorites")
+def index():
+    if request.method == "GET":
+        # populates a dict with articles title, link and date from DB
+        QUERY = "SELECT title, link, datetime FROM favorites ORDER BY datetime DESC"
+        articles = sql_to_dict('news.db', QUERY)
+
+        return render_template("favorites.html", articles=articles)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -140,7 +158,6 @@ def register():
         if password != confirmation:
             return render_template("register.html", passwordsMatch = "False")
     # check that username is not already taken (return apologies for all)
-        # TODO: incorrect number of bindings applied?
         if db.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchall():
             return render_template("register.html", uniqueUsername = "False")
         # use generate_password_hash

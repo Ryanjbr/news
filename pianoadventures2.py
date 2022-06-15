@@ -20,7 +20,7 @@ for article in bsobj.find_all("article"):
         date = parser.parse(date.text)
         dtInt = date_to_int(date)
 #    print(type(title), type(link), type(dtInt))
-    crsr.execute("INSERT or IGNORE INTO articles(title, link, datetime) VALUES(?, ?, ?)", (titlef, linkf, dtInt))
+    crsr.execute("INSERT or IGNORE INTO blogs(title, link, datetime) VALUES(?, ?, ?)", (titlef, linkf, dtInt))
 
 
 connection.commit()

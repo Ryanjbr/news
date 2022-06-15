@@ -19,7 +19,7 @@ for entry in piano['entries']:
       d.day * 10000 +\
       d.hour*100 +\
       d.minute
-    crsr.execute("INSERT or IGNORE INTO articles(title, link, datetime) VALUES(?, ?, ?)",
+    crsr.execute("INSERT or IGNORE INTO news(title, link, datetime) VALUES(?, ?, ?)",
                     (entry['title'], entry['link'], dtInt))
 
 
