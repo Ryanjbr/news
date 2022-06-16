@@ -37,30 +37,64 @@ def after_request(response):
     return response
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
     if request.method == "GET":
         # populates a dict with articles title, link and date from DB
-        QUERY = "SELECT title, link, datetime FROM news ORDER BY datetime DESC"
+        QUERY = "SELECT id, title, link, date FROM news ORDER BY date DESC"
         articles = sql_to_dict('news.db', QUERY)
 
         return render_template("index.html", articles=articles)
+    
+    if request.method == "POST":
+        connection = sqlite3.connect('news.db')
+        db = connection.cursor()
+        newsId = request.form['favorite']
+        date = db.execute("SELECT date FROM news WHERE id = ?", (newsId,)).fetchone()[0]
+        print(newsId, date, session["user_id"])
+        db.execute("INSERT INTO favorites(newsid, date, userid) VALUES(?, ?, ?)", (newsId, date, session["user_id"]))
+        connection.commit()
+        connection.close
+        return redirect("/")
 
 @app.route("/blogs")
 def blogs():
     if request.method == "GET":
         # populates a dict with articles title, link and date from DB
-        QUERY = "SELECT title, link, datetime FROM blogs ORDER BY datetime DESC"
+        QUERY = "SELECT id, title, link, date FROM blogs ORDER BY date DESC"
         articles = sql_to_dict('news.db', QUERY)
 
         return render_template("blogs.html", articles=articles)
+    
+    if request.method == "POST":
+        connection = sqlite3.connect('news.db')
+        db = connection.cursor()
+        blogsId = request.form['favorite']
+        date = db.execute("SELECT date FROM blogs WHERE id = ?", (newsId,)).fetchone()[0]
+        db.execute("INSERT INTO favorites(blogsid, date, userid) VALUES(?, ?, ?)", (newsId, date, session["user_id"]))
+        connection.commit()
+        connection.close
+        return redirect("/blogs")
 
 @app.route("/favorites")
-def index():
+def favorites():
     if request.method == "GET":
         # populates a dict with articles title, link and date from DB
-        QUERY = "SELECT title, link, datetime FROM favorites ORDER BY datetime DESC"
-        articles = sql_to_dict('news.db', QUERY)
+        QUERY = ("SELECT newsid, blogsid, date FROM favorites WHERE userid="+'"'+str(session["user_id"])+'"')
+        print(QUERY)
+        ids = sql_to_dict('news.db', QUERY)
+        print(ids)
+        articles = []
+        for id in ids:
+            if id["newsid"]:
+                QUERY = ("SELECT title, link, date FROM news WHERE id="+'"'+str(id["newsid"])+'"')
+                articles.append(sql_to_dict('news.db', QUERY)[0])
+            if id["blogsid"]:
+                QUERY = ("SELECT title, link, date FROM blogs WHERE id="+'"'+str(id["blogsid"])+'"')
+                articles.append(sql_to_dict('news.db', QUERY)[0])
+            else:
+                pass
+        print(articles)
 
         return render_template("favorites.html", articles=articles)
 
@@ -75,19 +109,22 @@ def login():
     if request.method == "POST":
 
         # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 403)
+        username = request.form.get("username")
+        if not username:
+            return render_template("login.html", usernameInput = "False")
 
         # Ensure password was submitted
-        elif not request.form.get("password"):
-            return apology("must provide password", 403)
+        password = request.form.get("password")
+        if not password:
+            return render_template("login.html", passwordInput = "False")
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        QUERY = "SELECT * FROM users WHERE username=" + "'" + request.form.get("username") + "'"
+        rows = sql_to_dict('news.db', QUERY)
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            return render_template("login.html", inputCorrect = "False")
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -98,6 +135,16 @@ def login():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/")
 
 @app.route("/changepassword", methods=["GET", "POST"])
 @login_required
@@ -149,7 +196,6 @@ def register():
             return render_template("register.html", usernameInput = "False")
         password = request.form.get("password")
         if not password:
-            # TODO: abstract the prompt_user function to work for all of the inputs without needing to change
             return render_template("register.html", passwordInput = "False")
         confirmation = request.form.get("confirmation")
         if not confirmation:
@@ -164,7 +210,6 @@ def register():
             # Hash the user password
         hash = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
         # use db.execute to insert user, using ? to insert yet unknown values
-        # TODO: not working
         db.execute("INSERT into users(username, hash) VALUES(?, ?)", (username, hash))
         connection.commit()
         QUERY = "SELECT * FROM users WHERE username=" + "'" + request.form.get("username") + "'"

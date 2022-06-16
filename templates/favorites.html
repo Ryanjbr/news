@@ -10,10 +10,8 @@
     <div class="article">    
         {% if article['title']|length <= 100 %}
         <h2><a href = {{ article['link'] }}>{{ article['title'] }}</a></h2>
-        <button>Favorite</button>
         {% else %}
         <h2><a href = {{ article['link'] }}>{{ article['title'][0:100] }}[...]</a></h2>
-        <button>Favorite</button>
         {% endif %}
     </div>
 </div>

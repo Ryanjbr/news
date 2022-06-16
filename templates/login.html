@@ -8,10 +8,46 @@
     <form action="/login" method="post">
         <div class="mb-3">
             <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
+            <p id="usernameIndicator" class="error"></p>
         </div>
+        <!-- validates user input, turns field red and gives error message -->
+        <script>
+            let username = document.querySelector('#username');
+            function promptUsername() {
+                if ("{{ usernameInput }}" == "False") {
+                    username.style.border = '2px solid red';
+                    let html = 'Please enter a username.'
+                    document.querySelector('#usernameIndicator').innerHTML = html
+                }
+            }
+            promptUsername()
+        </script>
         <div class="mb-3">
             <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password">
+            <p id="passwordIndicator" class="error"></p>
         </div>
+        <script>
+            let password = document.querySelector('#password');
+            function promptPassword() {
+                if ("{{ passwordInput }}" == "False") {
+                    password.style.border = '2px solid red';
+                    let html = 'Please enter a password.'
+                    document.querySelector('#passwordIndicator').innerHTML = html
+                }
+            }
+            promptPassword()
+        </script>
+        <script>
+
+            function promptInputCorrect() {
+                if ("{{ inputCorrect }}" == "False") {
+                    password.style.border = '2px solid red';
+                    let html = 'Username or password is incorrect.'
+                    document.querySelector('#passwordIndicator').innerHTML = html
+                }
+            }
+            promptInputCorrect()
+        </script>
         <button class="btn btn-primary" type="submit">Log In</button>
     </form>
 {% endblock %}
