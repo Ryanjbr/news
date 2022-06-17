@@ -4,6 +4,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import login_required, sql_to_dict
 import sqlite3
 
+
 # Configure application
 app = Flask(__name__)
 
@@ -38,40 +39,44 @@ def index():
         db = connection.cursor()
         newsId = request.form['favorite']
         date = db.execute("SELECT date FROM news WHERE id = ?", (newsId,)).fetchone()[0]
-        print(newsId, date, session["user_id"])
-        db.execute("INSERT INTO favorites(newsid, date, userid) VALUES(?, ?, ?)", (newsId, date, session["user_id"]))
+        try:
+           db.execute("INSERT INTO favorites(newsid, date, userid) VALUES(?, ?, ?)", (newsId, date, session["user_id"]))
+        except:
+            pass
         connection.commit()
         connection.close
         return redirect("/")
 
-@app.route("/blogs")
+@app.route("/blogs", methods=['GET', 'POST'])
 def blogs():
     if request.method == "GET":
         # populates a dict with articles title, link and date from DB
         QUERY = "SELECT id, title, link, date FROM blogs ORDER BY date DESC"
-        articles = sql_to_dict('news.db', QUERY)
+        blogs = sql_to_dict('news.db', QUERY)
 
-        return render_template("blogs.html", articles=articles)
+        return render_template("blogs.html", blogs=blogs)
     
     if request.method == "POST":
         connection = sqlite3.connect('news.db')
         db = connection.cursor()
-        blogsId = request.form['favorite']
-        date = db.execute("SELECT date FROM blogs WHERE id = ?", (newsId,)).fetchone()[0]
-        db.execute("INSERT INTO favorites(blogsid, date, userid) VALUES(?, ?, ?)", (newsId, date, session["user_id"]))
+        blogsId = request.form['favoriteblog']
+        date = db.execute("SELECT date FROM blogs WHERE id = ?", (blogsId,)).fetchone()[0]
+        try:
+            db.execute("INSERT INTO favorites(blogsid, date, userid) VALUES(?, ?, ?)", (blogsId, date, session["user_id"]))
+        except:
+            pass
         connection.commit()
         connection.close
-        return redirect("/blogs")
+        return redirect("/favorites")
 
 @app.route("/favorites")
 def favorites():
     if request.method == "GET":
         # populates a dict with articles title, link and date from DB
         QUERY = ("SELECT newsid, blogsid, date FROM favorites WHERE userid="+'"'+str(session["user_id"])+'"')
-        print(QUERY)
         ids = sql_to_dict('news.db', QUERY)
-        print(ids)
         articles = []
+        # adds ids to DB
         for id in ids:
             if id["newsid"]:
                 QUERY = ("SELECT title, link, date FROM news WHERE id="+'"'+str(id["newsid"])+'"')
@@ -81,7 +86,6 @@ def favorites():
                 articles.append(sql_to_dict('news.db', QUERY)[0])
             else:
                 pass
-        print(articles)
 
         return render_template("favorites.html", articles=articles)
 

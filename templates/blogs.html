@@ -1,19 +1,27 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    News
+    Blogs
 {% endblock %}
 
 {% block main %}
-{% for article in articles %}
+{% for blog in blogs %}
 <div class="container">
     <div class="article">    
-        {% if article['title']|length <= 100 %}
-        <h2><a href = {{ article['link'] }}>{{ article['title'] }}</a></h2>
-        <button class="btn btn-primary" name="favorite" value="{{ article['id'] }}" type="submit">Favorite</button>
+        {% if blog['title']|length <= 100 %}
+        <h2><a href = {{ blog['link'] }}>{{ blog['title'] }}</a></h2>
+        {% if session["user_id"] %}
+        <form action="/blogs" method="post">
+            <button class="btn btn-primary" name="favoriteblog" value="{{ blog['id'] }}" type="submit">Favorite</button>
+        </form>
+        {% endif %}
         {% else %}
-        <h2><a href = {{ article['link'] }}>{{ article['title'][0:100] }}[...]</a></h2>
-        <button class="btn btn-primary" name="favorite" value="{{ article['id'] }}" type="submit">Favorite</button>
+        <h2><a href = {{ blog['link'] }}>{{ blog['title'][0:100] }}[...]</a></h2>
+        {% if session["user_id"] %}
+        <form action="/blogs" method="post">
+            <button class="btn btn-primary" name="favoriteblog" value="{{ blog['id'] }}" type="submit">Favorite</button>
+        </form>
+        {% endif %}
         {% endif %}
     </div>
 </div>
