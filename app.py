@@ -151,29 +151,38 @@ def logout():
 def changePassword():
     """Change password"""
     if request.method == "GET":
-        # TODO: Implement HTML page
+        # displays form
         return render_template("changepassword.html")
 
     else:
+        # enter old password
+        connection = sqlite3.connect('news.db')
+        db = connection.cursor()
+        oldPassword = request.form.get("oldPassword")
+        if not oldPassword:
+            return render_template("changepassword.html", oldPasswordInput = "False")
         # Get username from current user
-        rows = db.execute("SELECT * FROM users WHERE username = ?", session["user_id"])
-
-        # confirm current password
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("oldpassword")):
-            return apology("invalid password", 403)
-
-        #enter new password
-        if not newpassword:
-            return apology("You must enter a password")
+        QUERY = "SELECT * FROM users WHERE id=" + "'" + str(session["user_id"]) + "'"
+        rows = sql_to_dict('news.db', QUERY)
+        # Check current password
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], oldPassword):
+            return render_template("changepassword.html", inputCorrect = "False")
+        # enter new password
+        newPassword = request.form.get("newPassword")
+        if not newPassword:
+            return render_template("changepassword.html", newPasswordInput = "False")
+        # confirm password
         confirmation = request.form.get("confirmation")
         if not confirmation:
-            return apology("You must confirm your password")
-    # check that password and confirmation match
-        if password != confirmation:
-            return apology("Passwords do not match")
-        hash = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
-        # TODO: Only insert password in row of current user id
-        db.execute("INSERT into users(hash) ?", hash)
+            return render_template("changepassword.html", confirmationInput = "False")
+        # check that password and confirmation match
+        if newPassword != confirmation:
+            return render_template("changepassword.html", passwordsMatch = "False")
+        hash = generate_password_hash(newPassword, method='pbkdf2:sha256', salt_length=8)
+        # update hash with new password
+        db.execute("UPDATE users SET hash = ? WHERE id = ?", (hash, session["user_id"]))
+        connection.commit()
+        connection.close
         return redirect("/")
 
 
@@ -214,7 +223,6 @@ def register():
         connection.commit()
         QUERY = "SELECT * FROM users WHERE username=" + "'" + request.form.get("username") + "'"
         rows = sql_to_dict('news.db', QUERY)
-        print(rows)
         session["user_id"] = rows[0]["id"]
         connection.close()
         return redirect("/")
