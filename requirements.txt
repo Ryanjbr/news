@@ -29,5 +29,4 @@ SQLAlchemy==1.4.37
 toml==0.10.2
 tornado==6.1
 Werkzeug==0.16.1
-xmlrpclib==1.0.1
 zipp==1.0.0
