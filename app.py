@@ -1,16 +1,8 @@
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
-from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import login_required, sql_to_dict
 import sqlite3
-
-
-
-# TODO: separate news posts and blog posts
-# TODO: Customize style and css
-# TODO: implement favorites functionality and create favorites page
-# TODO: implement field errors for login page
 
 # Configure application
 app = Flask(__name__)
