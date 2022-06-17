@@ -4,7 +4,6 @@ beautifulsoup4==4.11.1
 brotli==1.0.9
 ConfigParser==5.2.0
 cryptography==2.8
-Cython==0.29.30
 dl==0.1.0
 docutils==0.18.1
 Flask==1.1.1
