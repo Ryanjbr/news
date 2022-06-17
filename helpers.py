@@ -1,6 +1,3 @@
-import os
-import requests
-import urllib.parse
 import sqlite3
 
 from flask import redirect, render_template, request, session

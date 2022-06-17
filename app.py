@@ -1,12 +1,7 @@
-import os
-
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
-from sqlalchemy import null
 from werkzeug.security import check_password_hash, generate_password_hash
-from requests_html import HTMLSession
-from pygooglenews import GoogleNews
 from helpers import login_required, sql_to_dict
 import sqlite3
 
