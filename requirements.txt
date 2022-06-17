@@ -1,5 +1,4 @@
 Werkzeug
 Flask==1.1.1
 Jinja2==2.10.1
-sqlite3
 functools
