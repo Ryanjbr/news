@@ -67,7 +67,7 @@ def blogs():
             pass
         connection.commit()
         connection.close
-        return redirect("/favorites")
+        return redirect("/blogs")
 
 @app.route("/favorites")
 def favorites():
