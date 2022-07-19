@@ -5,10 +5,10 @@ import datetime
 from dateutil import parser
 from helpers import date_to_int
 
-connection = sqlite3.connect('news.db')
+connection = sqlite3.connect('../news.db')
 crsr = connection.cursor()
 
-url = 'https://ipadmusiced.wordpress.com/'
+url = 'https://pianoadventures.com/blog/category/piano-pedagogy/'
 html = requests.get(url)
 bsobj = soup(html.content, 'lxml')
 for article in bsobj.find_all("article"):
@@ -16,10 +16,10 @@ for article in bsobj.find_all("article"):
         titlef = title.text
         for link in title.find_all("a"):
             linkf = link.get('href')
-    for date in article.find_all("time", class_="entry-date published updated"):
+    for date in article.find_all("span", class_="post-date"):
         date = parser.parse(date.text)
         dtInt = date_to_int(date)
-        crsr.execute("INSERT or IGNORE INTO blogs(title, link, date) VALUES(?, ?, ?)", (titlef, linkf, dtInt))
+    crsr.execute("INSERT or IGNORE INTO blogs(title, link, date) VALUES(?, ?, ?)", (titlef, linkf, dtInt))
 
 
 connection.commit()

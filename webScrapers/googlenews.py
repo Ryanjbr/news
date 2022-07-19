@@ -9,7 +9,7 @@ gn = GoogleNews()
 
 piano  = gn.search('Piano pedagogy')
 
-connection = sqlite3.connect('news.db')
+connection = sqlite3.connect('../news.db')
 crsr = connection.cursor()
 
 for entry in piano['entries']:
@@ -21,12 +21,6 @@ for entry in piano['entries']:
       d.minute
     crsr.execute("INSERT or IGNORE INTO news(title, link, date) VALUES(?, ?, ?)",
                     (entry['title'], entry['link'], dtInt))
-
-
-#    print(entry['title'])
-#    print(entry['link'])
-#    d = parser.parse(entry['published'])
-#    print(d.strftime("%Y %m %d %H:%M:%S"))
 
 # Must be used to save data in the database
 connection.commit()
