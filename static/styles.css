@@ -89,3 +89,11 @@ body {
     color: #cbcfce;
     border-radius: 5px;
 }
+
+.register {
+    border: none;
+    background-color: #50BFC3;;
+    color: #1D3752;
+    border-radius: 5px;
+    padding: 5px;
+}

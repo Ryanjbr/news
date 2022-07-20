@@ -5,26 +5,38 @@
 {% endblock %}
 
 {% block main %}
-{% for blog in blogs %}
 <div class="container">
-    <div class="article">    
-        {% if blog['title']|length <= 100 %}
-        <h2><a href = {{ blog['link'] }}>{{ blog['title'] }}</a></h2>
-        {% if session["user_id"] %}
-        <form action="/blogs" method="post">
-            <button class="btn btn-primary" name="favoriteblog" value="{{ blog['id'] }}" type="submit">Favorite</button>
-        </form>
-        {% endif %}
+{% for blog in blogs %} 
+    {% if blog['title']|length <= 100 %}
+        <div class="article">  
+            <div class="articleTop"> 
+                <h2><a href = {{ blog['link'] }}>{{ blog['title'] }}</a></h2>
+            </div>
+        <div class="articleBottom">
+            {% if session["user_id"] %}
+            <form action="/blogs" method="post">
+                <button class="favorite" name="favorite" value="{{ blog['id'] }}" type="submit">Favorite</button>
+            </form>
+            {% endif %}
+        </div>
+        </div>
         {% else %}
-        <h2><a href = {{ blog['link'] }}>{{ blog['title'][0:100] }}[...]</a></h2>
-        {% if session["user_id"] %}
-        <form action="/blogs" method="post">
-            <button class="btn btn-primary" name="favoriteblog" value="{{ blog['id'] }}" type="submit">Favorite</button>
-        </form>
+            <div class="article">
+                <div class="articleTop">
+                    <h2><a href = {{ blog['link'] }}>{{ blog['title'][0:100] }}[...]</a></h2>
+
+                </div>
+                <div class="articleBottom">
+                    {% if session["user_id"] %}
+                        <form action="/blogs" method="post">
+                            <button class="favorite" name="favorite" value="{{ blog['id'] }}" type="submit">Favorite</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+
         {% endif %}
-        {% endif %}
-    </div>
-</div>
 {% endfor %}
+</div>
 
 {% endblock %}

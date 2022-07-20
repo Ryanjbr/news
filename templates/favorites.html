@@ -5,16 +5,28 @@
 {% endblock %}
 
 {% block main %}
-{% for article in articles %}
 <div class="container">
-    <div class="article">    
+    {% for article in articles %} 
         {% if article['title']|length <= 100 %}
-        <h2><a href = {{ article['link'] }}>{{ article['title'] }}</a></h2>
-        {% else %}
-        <h2><a href = {{ article['link'] }}>{{ article['title'][0:100] }}[...]</a></h2>
-        {% endif %}
+            <div class="article">  
+                <div class="articleTop"> 
+                    <h2><a href = {{ article['link'] }}>{{ article['title'] }}</a></h2>
+                </div>
+            <div class="articleBottom">
+            </div>
+            </div>
+            {% else %}
+                <div class="article">
+                    <div class="articleTop">
+                        <h2><a href = {{ article['link'] }}>{{ article['title'][0:100] }}[...]</a></h2>
+    
+                    </div>
+                    <div class="articleBottom">
+                    </div>
+                </div>
+    
+            {% endif %}
+    {% endfor %}
     </div>
-</div>
-{% endfor %}
 
 {% endblock %}
