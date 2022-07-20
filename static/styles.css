@@ -1,21 +1,50 @@
-html {
+/*color pallete: 
+#1D3752 
+#214D72
+#2C7695
+#50BFC3
+ */
+
+* {
     font-size: 100%;
+    color: #2C7695;
 }
+
+#navbar {
+/*     background-color: #50BFC3;
+    border-color: #50BFC3;
+    background-clip:inherit; */
+}
+
+body {
+    background-color: #cbcfce;
+}
+
 
 .error {
     color: red;
 }
 
+.container {
+    display: flex;
+    justify-content: space-evenly;
+    width: 80%;
+    margin-right: 10%;
+    margin-left: 10%;
+    column-gap: 10px;
+    row-gap: 10px;
+    flex-wrap: wrap;
+}
+
 .article {
     width: 30%;
     height: 200px;
-    float:left;
-    margin-bottom: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
+    background-color: #cbcfce;
+    color: #2C7695;
+    float: left;
     border: 1px solid black;
     border-radius: 10px;
-    box-shadow: 10px 10px 5px grey;
+    box-shadow: 10px 10px 5px rgba(128, 128, 128, 0.35);
     padding: 10px;
 }
 
@@ -25,5 +54,10 @@ h2 {
 
 a {
     text-decoration: none;
-    color: black;
+    color: #2C7695;
+}
+
+body {
+    background-image: url("images/piano.jpg");
+    background-size: contain;
 }
