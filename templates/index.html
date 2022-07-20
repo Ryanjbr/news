@@ -6,24 +6,36 @@
 
 {% block main %}
 <div class="container">
-{% for article in articles %}
-    <div class="article">    
-        {% if article['title']|length <= 100 %}
-        <h2><a href = {{ article['link'] }}>{{ article['title'] }}</a></h2>
-        {% if session["user_id"] %}
-        <form action="/" method="post">
-            <button class="btn btn-primary" name="favorite" value="{{ article['id'] }}" type="submit">Favorite</button>
-        </form>
-        {% endif %}
+{% for article in articles %} 
+    {% if article['title']|length <= 100 %}
+        <div class="article">  
+            <div class="articleTop"> 
+                <h2><a href = {{ article['link'] }}>{{ article['title'] }}</a></h2>
+            </div>
+        <div class="articleBottom">
+            {% if session["user_id"] %}
+            <form action="/" method="post">
+                <button class="favorite" name="favorite" value="{{ article['id'] }}" type="submit">Favorite</button>
+            </form>
+            {% endif %}
+        </div>
+        </div>
         {% else %}
-        <h2><a href = {{ article['link'] }}>{{ article['title'][0:100] }}[...]</a></h2>
-        {% if session["user_id"] %}
-        <form action="/" method="post">
-            <button class="btn btn-primary" name="favorite" value="{{ article['id'] }}" type="submit">Favorite</button>
-        </form>
+            <div class="article">
+                <div class="articleTop">
+                    <h2><a href = {{ article['link'] }}>{{ article['title'][0:100] }}[...]</a></h2>
+
+                </div>
+                <div class="articleBottom">
+                    {% if session["user_id"] %}
+                        <form action="/" method="post">
+                            <button class="favorite" name="favorite" value="{{ article['id'] }}" type="submit">Favorite</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+
         {% endif %}
-        {% endif %}
-    </div>
 {% endfor %}
 </div>
 

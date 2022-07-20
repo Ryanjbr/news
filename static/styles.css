@@ -37,15 +37,36 @@ body {
 }
 
 .article {
+    display: flex;
+    flex-direction: column;
     width: 30%;
+    max-width: 30%;
+    min-width: 30%;
     height: 200px;
-    background-color: #cbcfce;
+    background-color: rgba(0, 0, 0, 0,);
     color: #2C7695;
     float: left;
-    border: 1px solid black;
-    border-radius: 10px;
+    border: 2px solid black;
     box-shadow: 10px 10px 5px rgba(128, 128, 128, 0.35);
+    padding: 0px;
+}
+
+.articleTop {
+    height: 71%;
+    background-color: #cbcfce;
     padding: 10px;
+    border: none;
+    margin: -1px;
+
+}
+
+.articleBottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 31%;
+    margin: -1px;
+    background-color: #50BFC3;
 }
 
 h2 {
@@ -60,4 +81,11 @@ a {
 body {
     background-image: url("images/piano.jpg");
     background-size: contain;
+}
+
+.favorite {
+    border: none;
+    background-color: #1D3752;
+    color: #cbcfce;
+    border-radius: 5px;
 }
